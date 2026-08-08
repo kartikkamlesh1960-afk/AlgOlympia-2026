@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura | Intelligent Cycle Wellness</title>
+    
+    <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="cursor-glow"></div>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="glass-nav">
+        <div class="nav-brand">
+            <i data-lucide="sparkles" class="brand-icon"></i>
+            <span>Aura</span>
+        </div>
+        <div class="nav-links">
+            <a href="#dashboard" class="active" data-target="dashboard">Dashboard</a>
+            <a href="#calendar" data-target="calendar">My Calendar</a>
+            <a href="#log" data-target="log">Log</a>
+            <a href="#care" data-target="care">Care Hub</a>
+            <a href="#fitness" data-target="fitness">Fitness</a>
+            <a href="#viva" data-target="viva">Viva Prep</a>
+            <a href="#insights" data-target="insights">Insights</a>
+        </div>
+        <div class="nav-actions" style="display: flex; align-items: center; gap: 1rem;">
+            <button class="btn-secondary btn-icon" id="theme-toggle" aria-label="Toggle Dark Mode" style="width: 40px; height: 40px; border-radius: 50%;">
+                <i data-lucide="moon"></i>
+            </button>
+            <button class="btn-primary" onclick="openSection('log')">
+                <i data-lucide="plus"></i> Log Today
+            </button>
+        </div>
+    </nav>
+
+    <main class="app-container">
+        
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section-active fade-in">
+            <header class="section-header">
+                <div>
+                    <h1>Welcome back, <span class="highlight">Sarah</span></h1>
+                    <p class="subtitle">Here is your holistic cycle overview for today.</p>
+                </div>
+                <div class="date-badge" id="current-date">August 7, 2026</div>
+            </header>
+
+            <div class="dashboard-grid">
+                
+                <!-- Cycle Status Card -->
+                <div class="glass-card cycle-card">
+                    <div class="cycle-ring-container">
+                        <svg class="cycle-ring" viewBox="0 0 200 200">
+                            <circle class="ring-bg" cx="100" cy="100" r="90"></circle>
+                            <circle class="ring-progress" id="cycle-progress-ring" cx="100" cy="100" r="90"></circle>
+                        </svg>
+                        <div class="cycle-info-center">
+                            <h2 id="current-phase">Luteal</h2>
+                            <p class="day-count">Day <span id="current-day">22</span></p>
+                        </div>
+                    </div>
+                    <div class="cycle-details">
+                        <div class="detail-item">
+                            <i data-lucide="calendar-heart"></i>
+                            <div>
+                                <span class="label">Next Period</span>
+                                <span class="value" id="next-period-countdown">6 Days</span>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <i data-lucide="activity"></i>
+                            <div>
+                                <span class="label">Fertility</span>
+                                <span class="value" id="fertility-status">Low</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Daily Insight / Reassurance -->
+                <div class="glass-card insight-card">
+                    <div class="card-header">
+                        <h3><i data-lucide="heart-handshake"></i> Your Daily Insight</h3>
+                    </div>
+                    <div class="insight-content" id="daily-insight">
+                        <!-- Populated by JS -->
+                        <div class="insight-illustration">
+                            <i data-lucide="moon-star" class="large-icon"></i>
+                        </div>
+                        <h4>Nurture Your Body</h4>
+                        <p>You are in the late Luteal phase. Progesterone is peaking, which might make you feel a bit fatigued or bloated. <strong>This is completely normal!</strong> Over 74% of Aura users experience this.</p>
+                        <div class="remedy-tags">
+                            <span class="tag"><i data-lucide="cup-soda"></i> Hydrate</span>
+                            <span class="tag"><i data-lucide="flame"></i> Heat Pad</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Calendar Section (Initially Hidden) -->
+        <section id="calendar" class="section-hidden">
+             <header class="section-header">
+                <div>
+                    <h1>My Calendar</h1>
+                    <p class="subtitle">Your cycle history and vibrant future predictions at a glance.</p>
+                </div>
+            </header>
+            <div class="glass-card calendar-container">
+                <div class="calendar-header-controls">
+                    <button class="btn-secondary btn-icon" id="prev-month"><i data-lucide="chevron-left"></i></button>
+                    <h2 id="calendar-month-year">August 2026</h2>
+                    <button class="btn-secondary btn-icon" id="next-month"><i data-lucide="chevron-right"></i></button>
+                </div>
+                <div class="calendar-grid-header">
+                    <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+                </div>
+                <div class="calendar-grid" id="calendar-days">
+                    <!-- Populated by JS -->
+                </div>
+                <div class="calendar-legend">
+                    <span class="legend-item"><span class="dot dot-logged"></span> Past Period</span>
+                    <span class="legend-item"><span class="dot dot-predicted"></span> Predicted Period</span>
+                    <span class="legend-item"><span class="dot dot-fertile"></span> Ovulation / Fertile</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Log Section (Initially Hidden) -->
+        <section id="log" class="section-hidden">
+             <header class="section-header">
+                <div>
+                    <h1>Log Your Cycle</h1>
+                    <p class="subtitle">Track your body's signals to get personalized insights.</p>
+                </div>
+            </header>
+            
+            <div class="glass-card log-form-container">
+                <form id="period-log-form">
+                    <div class="form-section">
+                        <h3><i data-lucide="calendar"></i> Period Details</h3>
+                        <div class="input-grid">
+                            <div class="input-group">
+                                <label for="last-period">Last Period Start Date</label>
+                                <input type="date" id="last-period" required>
+                            </div>
+                            <div class="input-group">
+                                <label for="period-duration">Usual Duration (Days)</label>
+                                <input type="number" id="period-duration" min="1" max="14" value="5" required>
+                            </div>
+                            <div class="input-group">
+                                <label for="cycle-length">Usual Cycle Length (Days)</label>
+                                <input type="number" id="cycle-length" min="20" max="45" value="28" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3><i data-lucide="activity"></i> Today's Symptoms</h3>
+                        <p class="form-hint">Select what you are feeling today. We'll analyze it for you.</p>
+                        <div class="symptom-chips" id="symptom-picker">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3><i data-lucide="smile"></i> Mood & Energy</h3>
+                        <div class="slider-group">
+                            <label for="energy-slider">Energy Level: <span id="energy-val">Moderate</span></label>
+                            <input type="range" id="energy-slider" min="1" max="5" value="3" class="custom-slider">
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3><i data-lucide="clipboard-list"></i> Personal Notes & Follow-up</h3>
+                        <div class="input-group" style="margin-bottom: 1rem;">
+                            <label for="log-notes">How are you managing these symptoms?</label>
+                            <textarea id="log-notes" rows="3" placeholder="E.g., Took ibuprofen, rested with a heat pad..." style="width: 100%; padding: 0.8rem; border: 1px solid var(--glass-border); border-radius: var(--radius-sm); background: rgba(255, 255, 255, 0.5); font-family: inherit; outline: none; transition: var(--transition); resize: vertical;"></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label for="log-status">Follow-up Status</label>
+                            <select id="log-status" style="width: 100%; padding: 0.8rem; border: 1px solid var(--glass-border); border-radius: var(--radius-sm); background: rgba(255, 255, 255, 0.5); font-family: inherit; outline: none; transition: var(--transition);">
+                                <option value="Needs Review">Needs Review</option>
+                                <option value="Acted On">Acted On (Self-Care)</option>
+                                <option value="Escalated to Doctor">Escalated to Professional</option>
+                                <option value="Resolved">Resolved</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary w-full pulse-btn">Save Log & Get Insights</button>
+                </form>
+            </div>
+            
+            <!-- Smart Insight Results (Shows after log) -->
+            <div id="smart-insight-result" class="glass-card hidden mt-6 success-border">
+                <div class="result-header">
+                    <i data-lucide="check-circle-2" class="success-icon"></i>
+                    <h3>Smart Analysis Complete</h3>
+                </div>
+                <div class="result-body" id="smart-analysis-text">
+                    <!-- JS fills this -->
+                </div>
+            </div>
+
+            <!-- History / Recent Logs -->
+            <div class="history-section mt-6">
+                <h3><i data-lucide="history"></i> Recent Tracking History</h3>
+                <div id="history-records-container">
+                    <!-- Sample Record with Bounty Badge -->
+                    <div class="glass-card history-record">
+                        <div class="record-header">
+                            <h4>August 5, 2026</h4>
+                            <span class="status-badge badge-escalated">Escalated to Doctor</span>
+                        </div>
+                        <div class="record-body">
+                            <p><strong>Symptoms:</strong> Severe Cramps, Nausea</p>
+                            <p><strong>Energy:</strong> Exhausted</p>
+                            <p><strong>Notes:</strong> Pain was unmanageable with standard heat pads. Calling Dr. Smith tomorrow for an ultrasound check-up.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Care / Partner Hub Section (Initially Hidden) -->
+        <section id="care" class="section-hidden">
+             <header class="section-header">
+                <div>
+                    <h1>Partner Care Hub</h1>
+                    <p class="subtitle">Share your status and let your loved ones send you care packages.</p>
+                </div>
+                <div class="date-badge" style="background: rgba(232,156,174,0.1); border-color: rgba(232,156,174,0.3); color: var(--clr-rose-gold); cursor: pointer; display: flex; align-items: center;" onclick="navigator.clipboard.writeText(window.location.href); alert('Partner link copied to clipboard!');">
+                    <i data-lucide="share-2" style="width: 14px; margin-right: 4px;"></i> Share Link
+                </div>
+            </header>
+
+            <div class="care-status-card glass-card">
+                <h3>Sarah is currently in her <span class="highlight">Menstrual Phase</span></h3>
+                <p>She's logged <strong>Cramps</strong> and <strong>Fatigue</strong> today, and her energy levels are <strong>Low</strong>.</p>
+                <p>Show her some love! Pick a care package below and have it delivered instantly via Blinkit.</p>
+            </div>
+
+            <div class="care-products-grid">
+                <div class="glass-card product-card">
+                    <div style="overflow: hidden; width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+                        <img src="img/chocolates.jpg" alt="Dark Chocolates" class="product-img">
+                    </div>
+                    <h4>Premium Dark Chocolates</h4>
+                    <p class="product-price">₹450</p>
+                    <p class="product-desc">Boosts endorphins and magnesium levels, perfect for cravings.</p>
+                    <a href="https://blinkit.com/s/?q=dark%20chocolate" target="_blank" class="btn-primary w-full pulse-btn" style="text-decoration: none;"><img src="https://blinkit.com/favicon.ico" style="width: 16px; margin-right: 6px; border-radius: 50%;"> Order on Blinkit</a>
+                </div>
+                <div class="glass-card product-card">
+                    <div style="overflow: hidden; width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+                        <img src="img/flowers.jpg" alt="Fresh Peonies" class="product-img">
+                    </div>
+                    <h4>Fresh Pink Peonies</h4>
+                    <p class="product-price">₹850</p>
+                    <p class="product-desc">Instantly elevates the mood and brightens up the room.</p>
+                    <a href="https://blinkit.com/s/?q=flowers" target="_blank" class="btn-primary w-full pulse-btn" style="text-decoration: none;"><img src="https://blinkit.com/favicon.ico" style="width: 16px; margin-right: 6px; border-radius: 50%;"> Order on Blinkit</a>
+                </div>
+                <div class="glass-card product-card">
+                    <div style="overflow: hidden; width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+                        <img src="img/kit.jpg" alt="Comfort Kit" class="product-img">
+                    </div>
+                    <h4>Cozy Comfort Kit</h4>
+                    <p class="product-price">₹1200</p>
+                    <p class="product-desc">Includes chamomile tea and a soothing heat pad for cramps.</p>
+                    <a href="https://blinkit.com/s/?q=heating%20pad" target="_blank" class="btn-primary w-full pulse-btn" style="text-decoration: none;"><img src="https://blinkit.com/favicon.ico" style="width: 16px; margin-right: 6px; border-radius: 50%;"> Order on Blinkit</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Viva Practice Section (Initially Hidden) -->
+        <section id="viva" class="section-hidden">
+             <header class="section-header">
+                <div>
+                    <h1>Viva Practice Sessions</h1>
+                    <p class="subtitle">Search and filter your medical practice records and study sessions.</p>
+                </div>
+            </header>
+
+            <div class="glass-card mb-6">
+                <div class="filter-controls-grid">
+                    <div class="input-group">
+                        <label for="viva-search"><i data-lucide="search" style="width:14px; margin-right:4px;"></i> Keyword Search</label>
+                        <input type="text" id="viva-search" placeholder="Search topics, notes...">
+                    </div>
+                    <div class="input-group">
+                        <label for="viva-topic">Topic</label>
+                        <select id="viva-topic" style="width: 100%; padding: 0.8rem; border: 1px solid var(--glass-border); border-radius: var(--radius-sm); background: rgba(255, 255, 255, 0.5); font-family: inherit; outline: none;">
+                            <option value="">All Topics</option>
+                            <option value="Hormones">Hormones</option>
+                            <option value="Anatomy">Anatomy</option>
+                            <option value="Pathology">Pathology</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="viva-difficulty">Difficulty</label>
+                        <select id="viva-difficulty" style="width: 100%; padding: 0.8rem; border: 1px solid var(--glass-border); border-radius: var(--radius-sm); background: rgba(255, 255, 255, 0.5); font-family: inherit; outline: none;">
+                            <option value="">All Difficulties</option>
+                            <option value="Easy">Easy</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Hard">Hard</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="viva-status">Status</label>
+                        <select id="viva-status" style="width: 100%; padding: 0.8rem; border: 1px solid var(--glass-border); border-radius: var(--radius-sm); background: rgba(255, 255, 255, 0.5); font-family: inherit; outline: none;">
+                            <option value="">All Statuses</option>
+                            <option value="Needs Review">Needs Review</option>
+                            <option value="Mastered">Mastered</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: flex-end; margin-top: 1.5rem;">
+                    <button class="btn-secondary" id="viva-reset"><i data-lucide="rotate-ccw"></i> Reset Filters</button>
+                </div>
+            </div>
+
+            <div id="viva-results" class="viva-grid">
+                <!-- Populated by JS -->
+            </div>
+            
+            <div id="viva-empty" class="hidden" style="text-align: center; padding: 3rem; opacity: 0.7;">
+                <i data-lucide="inbox" style="width: 48px; height: 48px; margin-bottom: 1rem;"></i>
+                <h2>No records found</h2>
+                <p>Try adjusting your filters or search keywords.</p>
+            </div>
+        </section>
+
+        <!-- Fitness Section -->
+        <section id="fitness" class="section-hidden">
+             <header class="section-header">
+                <div>
+                    <h1>Cycle-Synced Fitness</h1>
+                    <p class="subtitle">Workouts optimized for your current hormonal phase.</p>
+                </div>
+            </header>
+
+            <div class="fitness-dashboard">
+                <div class="glass-card recommendation-card">
+                    <div class="phase-badge" id="fitness-phase-badge">Luteal Phase</div>
+                    <h2 id="workout-title">Restorative Pilates & Stretch</h2>
+                    <p id="workout-desc">Your energy might be lower as your body prepares for menstruation. Focus on low-impact movements to maintain circulation without spiking cortisol.</p>
+                    
+                    <div class="workout-metrics">
+                        <div class="metric"><i data-lucide="clock"></i> 20 Mins</div>
+                        <div class="metric"><i data-lucide="flame"></i> Low Intensity</div>
+                        <div class="metric"><i data-lucide="accessibility"></i> Full Body</div>
+                    </div>
+
+                    <button class="btn-primary" id="start-workout-btn">
+                        <i data-lucide="play"></i> Start Routine
+                    </button>
+                </div>
+
+                <div class="glass-card exercise-list">
+                    <h3>Routine Overview</h3>
+                    <ul class="routine-steps" id="routine-list">
+                        <!-- Populated by JS -->
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Active Workout Modal Overlay (Hidden by default) -->
+            <div id="workout-overlay" class="workout-overlay hidden">
+                <div class="workout-player glass-card">
+                    <button class="btn-close" id="close-workout"><i data-lucide="x"></i></button>
+                    <h2 id="active-exercise-name">Cat-Cow Stretch</h2>
+                    <div class="timer-display" id="workout-timer">00:45</div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="workout-progress"></div>
+                    </div>
+                    <div class="workout-controls">
+                        <button class="btn-secondary" id="prev-exercise"><i data-lucide="skip-back"></i></button>
+                        <button class="btn-primary large-btn" id="toggle-timer"><i data-lucide="pause"></i></button>
+                        <button class="btn-secondary" id="next-exercise"><i data-lucide="skip-forward"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Insights / Peer Data Section -->
+        <section id="insights" class="section-hidden">
+             <header class="section-header">
+                <div>
+                    <h1>Community Insights</h1>
+                    <p class="subtitle">You are not alone. See how your cycle compares to aggregated peer data.</p>
+                </div>
+            </header>
+
+            <div class="insights-grid">
+                <div class="glass-card chart-card">
+                    <h3><i data-lucide="bar-chart-2"></i> Symptom Frequency by Phase</h3>
+                    <div class="chart-container">
+                        <canvas id="symptomsChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="glass-card stats-card">
+                    <h3><i data-lucide="users"></i> Aura Community Stats</h3>
+                    <div class="stat-boxes">
+                        <div class="stat-box">
+                            <span class="stat-percent">82%</span>
+                            <p>of users experience bloating during the Luteal phase.</p>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-percent">65%</span>
+                            <p>report increased energy during the Follicular phase.</p>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-percent">91%</span>
+                            <p>find cycle-synced workouts reduce severe cramp intensity.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="js/mock-data.js"></script>
+    <script src="js/chart-config.js"></script>
+    <script src="js/fitness.js"></script>
+    <script src="js/calendar.js"></script>
+    <script src="js/viva.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
